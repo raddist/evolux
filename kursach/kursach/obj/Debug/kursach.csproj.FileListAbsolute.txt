@@ -1,0 +1,20 @@
+c:\users\andre\onedrive\documents\visual studio 2015\Projects\kursach\kursach\bin\Debug\kursach.exe.config
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\bin\Debug\kursach.exe
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\bin\Debug\kursach.pdb
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.csprojResolveAssemblyReference.cache
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.Form1.resources
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.mainForm.resources
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.Properties.Resources.resources
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.csproj.GenerateResource.Cache
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.exe
+C:\Users\andre\OneDrive\Documents\Visual Studio 2015\Projects\kursach\kursach\obj\Debug\kursach.pdb
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\kursach.exe.config
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.exe
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.pdb
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\kursach.exe
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\kursach.pdb
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.csprojResolveAssemblyReference.cache
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.Form1.resources
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.mainForm.resources
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.Properties.Resources.resources
+C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\obj\Debug\kursach.csproj.GenerateResource.Cache
