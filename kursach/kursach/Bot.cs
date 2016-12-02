@@ -63,7 +63,18 @@ namespace kursach
             isAlive = botToCopy.isAlive;
         }
 
-        public Genom CopyGenom()
+        // reset Bot
+        public void ResetBot()
+        {
+            curPlace = new Coord(0,0);
+            state = 0;
+            age = 0;
+            botHealth = DEFAULT_BOT_HEALTH;
+            // new genom will be inserted
+            isAlive = true;
+        }
+
+        public Genom GetGenom()
         {
             return botGenom;
         }
@@ -81,6 +92,11 @@ namespace kursach
         public int GetHealth()
         {
             return botHealth;
+        }
+
+        public void SetGenom(Genom genomToInsert)
+        {
+            botGenom = genomToInsert;
         }
 
         public void PrepareBotForNextGeneration(Coord emptyPlace)
@@ -162,7 +178,7 @@ namespace kursach
         // do one step
         public void DoNextStep()
         {
-            int counter = 10;
+            int counter = MAX_BOT_ACTIONS;
             for (int i = 0; i < counter; ++i)
             {
                 if (Engine(state) == true || !isAlive)

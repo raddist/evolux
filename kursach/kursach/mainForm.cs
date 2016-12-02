@@ -22,7 +22,7 @@ namespace kursach
 
             parent = parentForm;
 
-            evoWorld = new MyWorld(fieldDataGridView);
+            evoWorld = new MyWorld(fieldDataGridView, generationLbl, num1Lbl);
         }
 
         private void mainForm_FormClosed(object sender, FormClosedEventArgs e)

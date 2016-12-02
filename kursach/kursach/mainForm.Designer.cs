@@ -33,6 +33,7 @@
             this.pauseBtn = new System.Windows.Forms.Button();
             this.continueBtn = new System.Windows.Forms.Button();
             this.schedulePanel = new System.Windows.Forms.Panel();
+            this.generationHeaderLbl = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -40,9 +41,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.num1HeaderLbl = new System.Windows.Forms.Label();
             this.fieldDataGridView = new System.Windows.Forms.DataGridView();
             this.gridPanel = new System.Windows.Forms.Panel();
+            this.generationLbl = new System.Windows.Forms.Label();
+            this.num1Lbl = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.schedulePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldDataGridView)).BeginInit();
@@ -91,6 +94,9 @@
             // 
             // schedulePanel
             // 
+            this.schedulePanel.Controls.Add(this.num1Lbl);
+            this.schedulePanel.Controls.Add(this.generationLbl);
+            this.schedulePanel.Controls.Add(this.generationHeaderLbl);
             this.schedulePanel.Controls.Add(this.label8);
             this.schedulePanel.Controls.Add(this.label7);
             this.schedulePanel.Controls.Add(this.label6);
@@ -98,16 +104,25 @@
             this.schedulePanel.Controls.Add(this.label4);
             this.schedulePanel.Controls.Add(this.label3);
             this.schedulePanel.Controls.Add(this.label2);
-            this.schedulePanel.Controls.Add(this.label1);
+            this.schedulePanel.Controls.Add(this.num1HeaderLbl);
             this.schedulePanel.Location = new System.Drawing.Point(12, 458);
             this.schedulePanel.Name = "schedulePanel";
             this.schedulePanel.Size = new System.Drawing.Size(662, 167);
             this.schedulePanel.TabIndex = 2;
             // 
+            // generationHeaderLbl
+            // 
+            this.generationHeaderLbl.AutoSize = true;
+            this.generationHeaderLbl.Location = new System.Drawing.Point(202, 19);
+            this.generationHeaderLbl.Name = "generationHeaderLbl";
+            this.generationHeaderLbl.Size = new System.Drawing.Size(59, 13);
+            this.generationHeaderLbl.TabIndex = 8;
+            this.generationHeaderLbl.Text = "Generation";
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(293, 87);
+            this.label8.Location = new System.Drawing.Point(293, 127);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 7;
@@ -116,7 +131,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(293, 64);
+            this.label7.Location = new System.Drawing.Point(293, 105);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(35, 13);
             this.label7.TabIndex = 6;
@@ -125,7 +140,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(293, 42);
+            this.label6.Location = new System.Drawing.Point(293, 76);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 5;
@@ -134,7 +149,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(293, 19);
+            this.label5.Location = new System.Drawing.Point(293, 53);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 4;
@@ -143,7 +158,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(30, 87);
+            this.label4.Location = new System.Drawing.Point(30, 127);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 3;
@@ -152,7 +167,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 64);
+            this.label3.Location = new System.Drawing.Point(30, 105);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -161,20 +176,20 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 42);
+            this.label2.Location = new System.Drawing.Point(30, 76);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "label2";
             // 
-            // label1
+            // num1HeaderLbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.num1HeaderLbl.AutoSize = true;
+            this.num1HeaderLbl.Location = new System.Drawing.Point(30, 53);
+            this.num1HeaderLbl.Name = "num1HeaderLbl";
+            this.num1HeaderLbl.Size = new System.Drawing.Size(59, 13);
+            this.num1HeaderLbl.TabIndex = 0;
+            this.num1HeaderLbl.Text = "Number 1 :";
             // 
             // fieldDataGridView
             // 
@@ -198,6 +213,24 @@
             this.gridPanel.Name = "gridPanel";
             this.gridPanel.Size = new System.Drawing.Size(914, 439);
             this.gridPanel.TabIndex = 1;
+            // 
+            // generationLbl
+            // 
+            this.generationLbl.AutoSize = true;
+            this.generationLbl.Location = new System.Drawing.Point(287, 19);
+            this.generationLbl.Name = "generationLbl";
+            this.generationLbl.Size = new System.Drawing.Size(39, 13);
+            this.generationLbl.TabIndex = 9;
+            this.generationLbl.Text = "default";
+            // 
+            // num1Lbl
+            // 
+            this.num1Lbl.AutoSize = true;
+            this.num1Lbl.Location = new System.Drawing.Point(148, 53);
+            this.num1Lbl.Name = "num1Lbl";
+            this.num1Lbl.Size = new System.Drawing.Size(39, 13);
+            this.num1Lbl.TabIndex = 10;
+            this.num1Lbl.Text = "default";
             // 
             // mainForm
             // 
@@ -233,8 +266,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label num1HeaderLbl;
         private System.Windows.Forms.Panel gridPanel;
         private System.Windows.Forms.DataGridView fieldDataGridView;
+        private System.Windows.Forms.Label generationHeaderLbl;
+        private System.Windows.Forms.Label generationLbl;
+        private System.Windows.Forms.Label num1Lbl;
     }
 }

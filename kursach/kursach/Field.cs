@@ -38,10 +38,21 @@ namespace kursach
             fieldDataGridView.CurrentCell = fieldDataGridView[1, 1];
         }
 
+        public void DoDraw()
+        {
+            drawChanges = true;
+        }
+
+        public void DontDraw()
+        {
+            drawChanges = false;
+        }
+
+
         // shared func ////////////////////////////////////////////////////////////////////////////////////
         public void PrepareFieldForGeneration()
         {
-            PutRandFood(FOOD_VOLUME);
+            PutRandFood(FOOD_ON_FIELD);
             PutRandPois();
         }
 
@@ -63,7 +74,7 @@ namespace kursach
 
         public void PutRandPois()
         {
-            for (int i = 0; i < FOOD_ON_FIELD; ++i)
+            for (int i = 0; i < POIS_ON_FIELD; ++i)
             {
                 Coord temp = GetFreeCell();
                 cells[temp.x, temp.y] = CellType.PoisonCell;
@@ -229,7 +240,7 @@ namespace kursach
                 fieldDataGridView.Width = colWidth * FIELD_WIDTH + 3;
             }
             // make font
-            fieldDataGridView.DefaultCellStyle.Font = new Font("Tahoma", rowHeight / 2 - 1);
+            fieldDataGridView.DefaultCellStyle.Font = new Font("Tahoma", rowHeight / 3);
         }
 
         //state

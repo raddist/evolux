@@ -13,7 +13,7 @@ namespace kursach
     class MyWorld
     {
         //behavior
-        public MyWorld(DataGridView parentGrid)
+        public MyWorld(DataGridView parentGrid, Label genlbl, Label num1lbl)
         {
             evoField = new Field(parentGrid);
             evoBots = new Bot[NUM_OF_BOTS];
@@ -24,6 +24,11 @@ namespace kursach
                 evoBots[i] = new Bot(this, rnd);
             }
             parentGrid.ClearSelection();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            generation = 1;
+            this.genLbl = genlbl;
+            this.num1 = num1lbl;
+            showGeneration();
 
             mythread = new Thread(evolution);
             mythread.Start();
@@ -49,6 +54,7 @@ namespace kursach
         // button handlers
         public void StartEvolution()
         {
+            evoField.DontDraw();
             doProcess = true;
         }
 
@@ -59,6 +65,7 @@ namespace kursach
 
         public void SeeOneGeneration()
         {
+            evoField.DoDraw();
             doOneGeneration = true;
         }
         // end button handlers
@@ -116,9 +123,15 @@ namespace kursach
                 {
                     // go to the next generation
                     prepareNextGeneration();
+                    generation++;
+                    showGeneration();
                     return;
                 }
-                Thread.Sleep(TIME_TO_SLEEP_MS);
+                // if we see only one generation
+                if (doOneGeneration)
+                {
+                    Thread.Sleep(TIME_TO_SLEEP_MS);
+                }
             }
         }
 
@@ -126,6 +139,20 @@ namespace kursach
         {
             evoField.ResetField();
             sortBots();
+            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            {
+                evoBots[i].ResetBot();
+            }
+
+            Random rnd = new Random();
+            for (int i = 0; i < ALIVE_LIMIT; ++i)
+            {
+                Genom genomToCopy = evoBots[i].GetGenom();
+
+                evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy);
+                evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, rnd));
+                evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, rnd));
+            }
         }
 
         private void sortBots()
@@ -143,6 +170,7 @@ namespace kursach
                     }
                 }
             }
+            num1.Text = evoBots[0].GetAge().ToString();
         }
 
 
@@ -194,14 +222,21 @@ namespace kursach
         }
         // shared with field /////////////////////////////////////////////////////////////////////////////////
 
+        private void showGeneration()
+        {
+            genLbl.Text = generation.ToString();
+        }
 
         // state
         Bot[] evoBots;
-
         Field evoField;
 
         bool doProcess = false;
         bool doOneGeneration = false;
+
+        Label num1;
+        Label genLbl;
+        int generation;
 
         Thread mythread;
     }
