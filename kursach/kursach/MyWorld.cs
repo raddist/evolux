@@ -16,14 +16,14 @@ namespace kursach
         public MyWorld(DataGridView parentGrid)
         {
             evoField = new Field(parentGrid);
-            evoBots = new Bot[consts.NUM_OF_BOTS];
+            evoBots = new Bot[NUM_OF_BOTS];
 
             Random rnd = new Random();
-            for (int i = 0; i < consts.NUM_OF_BOTS; ++i)
+            for (int i = 0; i < NUM_OF_BOTS; ++i)
             {
-                evoBots[i] = new Bot(this, GetFreeCell(), rnd);
+                evoBots[i] = new Bot(this, rnd);
             }
-            parentGrid.ClearSelection();
+            parentGrid.ClearSelection();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             mythread = new Thread(evolution);
             mythread.Start();
@@ -46,6 +46,7 @@ namespace kursach
         {
         }
 
+        // button handlers
         public void StartEvolution()
         {
             doProcess = true;
@@ -55,6 +56,12 @@ namespace kursach
         {
             doProcess = false;
         }
+
+        public void SeeOneGeneration()
+        {
+            doOneGeneration = true;
+        }
+        // end button handlers
 
         public int NextStep()
         {
@@ -72,19 +79,72 @@ namespace kursach
 
         private void evolution()
         {
+            // try to gi in permanently
             while (true)
             {
-                if (doProcess)
+                // if we pressed Continue or See Next Generation
+                if (doProcess || doOneGeneration)
                 {
-                    int howMuchAlive = NextStep();
-                    Thread.Sleep(TIME_TO_SLEEP_MS);
-                    if (howMuchAlive == 0)
+                    processOneGeneration();
+                    doOneGeneration = false;
+                }
+            }
+        }
+
+        private void processOneGeneration()
+        {
+            int stepsWithoutFood = 0;
+            evoField.PrepareFieldForGeneration();
+            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            {
+                Coord emptyPlace = evoField.GetFreeCell();
+                evoBots[i].PrepareBotForNextGeneration(emptyPlace);
+            }
+
+            while (true)
+            {                
+                int howMuchAlive = NextStep();
+                stepsWithoutFood++;
+                // add some food
+                if (stepsWithoutFood > MAX_STEPS_WITHOUT_FOOD)
+                {
+                    evoField.PutRandFood(EXTRA_FOOD_VOLUME);
+                    stepsWithoutFood = 0;
+                }
+
+                if (howMuchAlive == 0)
+                {
+                    // go to the next generation
+                    prepareNextGeneration();
+                    return;
+                }
+                Thread.Sleep(TIME_TO_SLEEP_MS);
+            }
+        }
+
+        private void prepareNextGeneration()
+        {
+            evoField.ResetField();
+            sortBots();
+        }
+
+        private void sortBots()
+        {
+            // bubble sort
+            for (int i = 0; i < NUM_OF_BOTS-1; ++i)
+            {
+                for (int j = i; j < NUM_OF_BOTS - 1; ++j)
+                {
+                    if (evoBots[j].GetAge() < evoBots[j + 1].GetAge())
                     {
-                        return;
+                        Bot temp = new Bot(evoBots[j]);
+                        evoBots[j].CopyBot(evoBots[j + 1]);
+                        evoBots[j+1].CopyBot(evoBots[j]);
                     }
                 }
             }
         }
+
 
         public int GetMaxLifeLen()
         {
@@ -141,6 +201,7 @@ namespace kursach
         Field evoField;
 
         bool doProcess = false;
+        bool doOneGeneration = false;
 
         Thread mythread;
     }

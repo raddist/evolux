@@ -12,16 +12,80 @@ namespace kursach
         // behavior
 
         // ctor
-        public Bot(MyWorld parent, Coord emptyCell, Random rnd)
+        public Bot(MyWorld parent, Random rnd)
+        {
+            parentWorld = parent;
+
+            curPlace = new Coord(0, 0);
+            state = 0;
+            age = 0;
+            botHealth = DEFAULT_BOT_HEALTH;
+            botGenom = new Genom(rnd);
+            isAlive = true;
+        }
+
+        // copy ctor
+        public Bot(Bot botToCopy)
+        {
+            parentWorld = botToCopy.parentWorld;
+
+            curPlace = botToCopy.curPlace;
+            state = botToCopy.state;
+            age = botToCopy.age;
+            botHealth = botToCopy.botHealth;
+            botGenom = botToCopy.botGenom;
+            isAlive = botToCopy.isAlive;
+        }
+
+        // ctor with genom parameter
+        public Bot(MyWorld parent, Coord emptyCell, Random rnd, Genom oldGenom)
         {
             parentWorld = parent;
 
             curPlace = emptyCell;
             state = 0;
+            age = 0;
             botHealth = DEFAULT_BOT_HEALTH;
-            botGenom = new Genom(rnd);
+            botGenom = oldGenom;
             isAlive = true;
+        }
 
+        // copy
+        public void CopyBot(Bot botToCopy)
+        {
+            parentWorld = botToCopy.parentWorld;
+
+            curPlace = botToCopy.curPlace;
+            state = botToCopy.state;
+            age = botToCopy.age;
+            botHealth = botToCopy.botHealth;
+            botGenom = botToCopy.botGenom;
+            isAlive = botToCopy.isAlive;
+        }
+
+        public Genom CopyGenom()
+        {
+            return botGenom;
+        }
+
+        public int GetAge()
+        {
+            return age;
+        }
+
+        public Coord GetCurPlace()
+        {
+            return curPlace;
+        }
+
+        public int GetHealth()
+        {
+            return botHealth;
+        }
+
+        public void PrepareBotForNextGeneration(Coord emptyPlace)
+        {
+            curPlace = emptyPlace;
             parentWorld.PutBot(curPlace, botHealth);
         }
 
@@ -113,7 +177,7 @@ namespace kursach
         }
 
         // end of step
-        public void finalize()
+        private void finalize()
         {
             botHealth -= 1;
             if (botHealth > 0)
@@ -125,6 +189,7 @@ namespace kursach
                 Kill();
                 parentWorld.KillBot(curPlace);
             }
+            age++;
         }
 
         // move action
@@ -235,6 +300,7 @@ namespace kursach
         int state;
         Coord curPlace;
         int botHealth;
+        int age;
         Genom botGenom;
         bool isAlive;
 

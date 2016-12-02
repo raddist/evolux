@@ -33,7 +33,7 @@ namespace kursach
 
         private void seeNextGenBtn_Click(object sender, EventArgs e)
         {
-            evoWorld.NextStep();
+            evoWorld.SeeOneGeneration();
         }
 
         private void continueBtn_Click(object sender, EventArgs e)

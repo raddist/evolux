@@ -37,11 +37,15 @@ namespace kursach
         public static int POIS_ON_FIELD = 10;//50
 
         // colors on the field
+        public static Color CELL_COLOR = Color.White;
         public static Color BOT_COLOR = Color.Gray;
         public static Color FOOD_COLOR = Color.Green;
         public static Color POIS_COLOR = Color.Red;
 
-        public static int TIME_TO_SLEEP_MS = 300;
+        public static int TIME_TO_SLEEP_MS = 100;
         public static int DEFAULT_BOT_HEALTH = 99;
+        public static int ALIVE_LIMIT = 4;
+        public static int MAX_STEPS_WITHOUT_FOOD = 50;
+        public static int EXTRA_FOOD_VOLUME = 5;
     }
 }

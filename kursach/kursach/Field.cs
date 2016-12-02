@@ -30,41 +30,19 @@ namespace kursach
             }
 
             fieldDataGridView = parentGrid;
-            setGridPrefs();
+            drawChanges = true;
 
-            PutRandFood();
-            PutRandPois();
+            setGridPrefs();
 
             // clear selection from (0,0)
             fieldDataGridView.CurrentCell = fieldDataGridView[1, 1];
         }
 
-        private void setGridPrefs()
+        // shared func ////////////////////////////////////////////////////////////////////////////////////
+        public void PrepareFieldForGeneration()
         {
-            // set number of cells
-            fieldDataGridView.ColumnCount = FIELD_WIDTH;
-            fieldDataGridView.RowCount = FIELD_HEIGHT;
-
-            int fieldHeight = fieldDataGridView.Height;
-            int fieldWidth = fieldDataGridView.Width;
-            int rowHeight = fieldHeight / FIELD_HEIGHT;
-            int colWidth = fieldWidth / FIELD_WIDTH;
-
-            foreach (DataGridViewRow row in fieldDataGridView.Rows)
-            {
-                row.Height = rowHeight;
-                // little correct
-                fieldDataGridView.Height = rowHeight * FIELD_HEIGHT + 3;
-            }
-
-            foreach (DataGridViewColumn col in fieldDataGridView.Columns)
-            {
-                col.Width = colWidth;
-                // little correct
-                fieldDataGridView.Width = colWidth * FIELD_WIDTH + 3;
-            }
-            // make font
-            fieldDataGridView.DefaultCellStyle.Font = new Font("Tahoma", rowHeight / 2 - 1);
+            PutRandFood(FOOD_VOLUME);
+            PutRandPois();
         }
 
         public CellType GetCellType(Coord dest)
@@ -72,23 +50,14 @@ namespace kursach
             return (isValid(dest.x, dest.y)) ? cells[dest.x, dest.y] : CellType.WallCell;
         }
 
-        private bool isValid(int x, int y)
+        public void PutRandFood(int volume)
         {
-            if (x < 0 || x >= FIELD_WIDTH || y < 0 || y >= FIELD_HEIGHT)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public void PutRandFood()
-        {
-            for (int i = 0; i < FOOD_ON_FIELD; ++i)
+            for (int i = 0; i < volume; ++i)
             {
                 Coord temp = GetFreeCell();
                 cells[temp.x, temp.y] = CellType.FoodCell;
                 // drow on the grid
-                fieldDataGridView.Rows[temp.y].Cells[temp.x].Style.BackColor = FOOD_COLOR;
+                drawFoodCell(temp);
             }
         }
 
@@ -98,23 +67,39 @@ namespace kursach
             {
                 Coord temp = GetFreeCell();
                 cells[temp.x, temp.y] = CellType.PoisonCell;
-                // drow on the grid
-                fieldDataGridView.Rows[temp.y].Cells[temp.x].Style.BackColor = POIS_COLOR;
+                // draw on the grid
+                drawPoisonCell(temp);
             }
         }
 
-        public void PutBot(Coord place, int health)
+        public void PutBot(Coord dest, int health)
         {
-            cells[place.x, place.y] = CellType.BotCell;
-            cellsValue[place.x, place.y] = health;
-            // drow on the grid
-            fieldDataGridView.Rows[place.y].Cells[place.x].Style.BackColor = BOT_COLOR;
-            fieldDataGridView.Rows[place.y].Cells[place.x].Value = cellsValue[place.x, place.y];
+            cells[dest.x, dest.y] = CellType.BotCell;
+            cellsValue[dest.x, dest.y] = health;
+            // draw on the grid
+            drawBotCell(dest, health);
         }
 
-        public void RemoveBot(Coord place)
+        public void RemoveBot(Coord dest)
         {
-            clearCell(place);
+            cells[dest.x, dest.y] = CellType.EmptyCell;
+            // draw
+            clearCell(dest);
+        }
+
+        public void ResetField()
+        {
+            for (int i = 0; i < FIELD_HEIGHT; ++i)
+            {
+                for (int j = 0; j < FIELD_WIDTH; ++j)
+                {
+                    cells[j, i] = CellType.EmptyCell;
+                    cellsValue[j, i] = 0;
+                    // draw
+                    clearCell(new Coord(j,i));
+
+                }
+            }
         }
 
         public Coord GetFreeCell()
@@ -145,30 +130,106 @@ namespace kursach
         {
             cells[dest.x, dest.y] = CellType.FoodCell;
             // drow on the grid
-            fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = FOOD_COLOR;
+            drawFoodCell(dest);
         }
 
         public void KillBot(Coord dest)
         {
             cells[dest.x, dest.y] = CellType.PoisonCell;
-            // drow on the grid
-            fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = POIS_COLOR;
-            fieldDataGridView.Rows[dest.y].Cells[dest.x].Value = "";
+            //draw
+            drawPoisonCell(dest);
         }
 
         public void RemoveFood(Coord dest)
         {
+            cells[dest.x, dest.y] = CellType.EmptyCell;
+            // draw
             clearCell(dest);
+        }
+
+        // end shared func /////////////////////////////////////////////////////////////////////////////////////
+
+
+        // private
+
+        // draw interface
+        private void drawBotCell(Coord dest, int health)
+        {
+            if (drawChanges)
+            {
+                int x = dest.x;
+                int y = dest.y;
+
+                fieldDataGridView.Rows[y].Cells[x].Style.BackColor = BOT_COLOR;
+                fieldDataGridView.Rows[y].Cells[x].Value = health;
+            }
+        }
+
+        private void drawFoodCell(Coord dest)
+        {
+            if (drawChanges)
+            {
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = FOOD_COLOR;
+            }
+        }
+
+        private void drawPoisonCell(Coord dest)
+        {
+            if (drawChanges)
+            {
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = POIS_COLOR;
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Value = "";
+            }
         }
 
         private void clearCell(Coord dest)
         {
-            int x = dest.x;
-            int y = dest.y;
-            cells[x, y] = CellType.EmptyCell;
+            if (drawChanges)
+            {
+                int x = dest.x;
+                int y = dest.y;
 
-            fieldDataGridView.Rows[y].Cells[x].Style.BackColor = Color.White;
-            fieldDataGridView.Rows[y].Cells[x].Value = "";
+                fieldDataGridView.Rows[y].Cells[x].Style.BackColor = Color.White;
+                fieldDataGridView.Rows[y].Cells[x].Value = "";
+            }
+        }
+        // end draw interface
+
+        private bool isValid(int x, int y)
+        {
+            if (x < 0 || x >= FIELD_WIDTH || y < 0 || y >= FIELD_HEIGHT)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void setGridPrefs()
+        {
+            // set number of cells
+            fieldDataGridView.ColumnCount = FIELD_WIDTH;
+            fieldDataGridView.RowCount = FIELD_HEIGHT;
+
+            int fieldHeight = fieldDataGridView.Height;
+            int fieldWidth = fieldDataGridView.Width;
+            int rowHeight = fieldHeight / FIELD_HEIGHT;
+            int colWidth = fieldWidth / FIELD_WIDTH;
+
+            foreach (DataGridViewRow row in fieldDataGridView.Rows)
+            {
+                row.Height = rowHeight;
+                // little correct
+                fieldDataGridView.Height = rowHeight * FIELD_HEIGHT + 3;
+            }
+
+            foreach (DataGridViewColumn col in fieldDataGridView.Columns)
+            {
+                col.Width = colWidth;
+                // little correct
+                fieldDataGridView.Width = colWidth * FIELD_WIDTH + 3;
+            }
+            // make font
+            fieldDataGridView.DefaultCellStyle.Font = new Font("Tahoma", rowHeight / 2 - 1);
         }
 
         //state
@@ -176,5 +237,7 @@ namespace kursach
         int[,] cellsValue;
 
         DataGridView fieldDataGridView;
+
+        bool drawChanges;
     }
 }
