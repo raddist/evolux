@@ -33,6 +33,8 @@
             this.pauseBtn = new System.Windows.Forms.Button();
             this.continueBtn = new System.Windows.Forms.Button();
             this.schedulePanel = new System.Windows.Forms.Panel();
+            this.num1Lbl = new System.Windows.Forms.Label();
+            this.generationLbl = new System.Windows.Forms.Label();
             this.generationHeaderLbl = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -44,8 +46,6 @@
             this.num1HeaderLbl = new System.Windows.Forms.Label();
             this.fieldDataGridView = new System.Windows.Forms.DataGridView();
             this.gridPanel = new System.Windows.Forms.Panel();
-            this.generationLbl = new System.Windows.Forms.Label();
-            this.num1Lbl = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.schedulePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldDataGridView)).BeginInit();
@@ -54,6 +54,7 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.seeNextGenBtn);
             this.panel1.Controls.Add(this.pauseBtn);
             this.panel1.Controls.Add(this.continueBtn);
@@ -94,6 +95,8 @@
             // 
             // schedulePanel
             // 
+            this.schedulePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.schedulePanel.Controls.Add(this.num1Lbl);
             this.schedulePanel.Controls.Add(this.generationLbl);
             this.schedulePanel.Controls.Add(this.generationHeaderLbl);
@@ -109,6 +112,23 @@
             this.schedulePanel.Name = "schedulePanel";
             this.schedulePanel.Size = new System.Drawing.Size(662, 167);
             this.schedulePanel.TabIndex = 2;
+            // 
+            // num1Lbl
+            // 
+            this.num1Lbl.Location = new System.Drawing.Point(148, 53);
+            this.num1Lbl.Name = "num1Lbl";
+            this.num1Lbl.Size = new System.Drawing.Size(100, 23);
+            this.num1Lbl.TabIndex = 10;
+            this.num1Lbl.Text = "default";
+            // 
+            // generationLbl
+            // 
+            this.generationLbl.AutoSize = true;
+            this.generationLbl.Location = new System.Drawing.Point(287, 19);
+            this.generationLbl.Name = "generationLbl";
+            this.generationLbl.Size = new System.Drawing.Size(39, 13);
+            this.generationLbl.TabIndex = 9;
+            this.generationLbl.Text = "default";
             // 
             // generationHeaderLbl
             // 
@@ -196,6 +216,9 @@
             this.fieldDataGridView.AllowUserToAddRows = false;
             this.fieldDataGridView.AllowUserToResizeColumns = false;
             this.fieldDataGridView.AllowUserToResizeRows = false;
+            this.fieldDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fieldDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.fieldDataGridView.ColumnHeadersVisible = false;
             this.fieldDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
@@ -208,29 +231,14 @@
             // 
             // gridPanel
             // 
+            this.gridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridPanel.Controls.Add(this.fieldDataGridView);
             this.gridPanel.Location = new System.Drawing.Point(12, 13);
             this.gridPanel.Name = "gridPanel";
             this.gridPanel.Size = new System.Drawing.Size(914, 439);
             this.gridPanel.TabIndex = 1;
-            // 
-            // generationLbl
-            // 
-            this.generationLbl.AutoSize = true;
-            this.generationLbl.Location = new System.Drawing.Point(287, 19);
-            this.generationLbl.Name = "generationLbl";
-            this.generationLbl.Size = new System.Drawing.Size(39, 13);
-            this.generationLbl.TabIndex = 9;
-            this.generationLbl.Text = "default";
-            // 
-            // num1Lbl
-            // 
-            this.num1Lbl.AutoSize = true;
-            this.num1Lbl.Location = new System.Drawing.Point(148, 53);
-            this.num1Lbl.Name = "num1Lbl";
-            this.num1Lbl.Size = new System.Drawing.Size(39, 13);
-            this.num1Lbl.TabIndex = 10;
-            this.num1Lbl.Text = "default";
             // 
             // mainForm
             // 
@@ -243,6 +251,7 @@
             this.Name = "mainForm";
             this.Text = "mainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainForm_FormClosed);
+            this.Resize += new System.EventHandler(this.mainForm_Resize);
             this.panel1.ResumeLayout(false);
             this.schedulePanel.ResumeLayout(false);
             this.schedulePanel.PerformLayout();

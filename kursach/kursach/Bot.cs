@@ -314,6 +314,8 @@ namespace kursach
         MyWorld parentWorld;
 
         int state;
+        int orientation;
+
         Coord curPlace;
         int botHealth;
         int age;

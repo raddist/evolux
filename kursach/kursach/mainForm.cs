@@ -45,5 +45,10 @@ namespace kursach
         {
             evoWorld.PauseEvolution();
         }
+
+        private void mainForm_Resize(object sender, EventArgs e)
+        {
+            evoWorld.ResizeField();
+        }
     }
 }

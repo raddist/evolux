@@ -215,6 +215,11 @@ namespace kursach
             return true;
         }
 
+        public void Resize()
+        {
+            setGridPrefs();
+        }
+
         private void setGridPrefs()
         {
             // set number of cells

@@ -68,6 +68,12 @@ namespace kursach
             evoField.DoDraw();
             doOneGeneration = true;
         }
+
+        public void ResizeField()
+        {
+            evoField.Resize();
+        }
+
         // end button handlers
 
         public int NextStep()
@@ -148,6 +154,7 @@ namespace kursach
             for (int i = 0; i < ALIVE_LIMIT; ++i)
             {
                 Genom genomToCopy = evoBots[i].GetGenom();
+                //int second_mutation = (generation % 1000 == 0) ? HARD_MUTATION : NORM_MUTATION;
 
                 evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy);
                 evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, rnd));
@@ -160,13 +167,13 @@ namespace kursach
             // bubble sort
             for (int i = 0; i < NUM_OF_BOTS-1; ++i)
             {
-                for (int j = i; j < NUM_OF_BOTS - 1; ++j)
+                for (int j = 0; j < NUM_OF_BOTS - 1-i; ++j)
                 {
                     if (evoBots[j].GetAge() < evoBots[j + 1].GetAge())
                     {
                         Bot temp = new Bot(evoBots[j]);
                         evoBots[j].CopyBot(evoBots[j + 1]);
-                        evoBots[j+1].CopyBot(evoBots[j]);
+                        evoBots[j+1].CopyBot(temp);
                     }
                 }
             }

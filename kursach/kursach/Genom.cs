@@ -45,7 +45,7 @@ namespace kursach
             {
                 int index = rnd.Next() % GENOM_LENGTH;
                 int command = rnd.Next() % MAX_COMMAND_NUMBER;
-                botGenom[index] = command;
+                mutateGenom.botGenom[index] = command;
                 counter++;
             }
 
