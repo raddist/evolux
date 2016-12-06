@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static kursach.consts;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace kursach
 {
@@ -18,6 +20,7 @@ namespace kursach
 
             curPlace = new Coord(0, 0);
             state = 0;
+            orientation = 0;
             age = 0;
             botHealth = DEFAULT_BOT_HEALTH;
             botGenom = new Genom(rnd);
@@ -31,52 +34,43 @@ namespace kursach
 
             curPlace = botToCopy.curPlace;
             state = botToCopy.state;
+            orientation = botToCopy.orientation;
             age = botToCopy.age;
             botHealth = botToCopy.botHealth;
             botGenom = botToCopy.botGenom;
             isAlive = botToCopy.isAlive;
         }
 
-        // ctor with genom parameter
-        public Bot(MyWorld parent, Coord emptyCell, Random rnd, Genom oldGenom)
-        {
-            parentWorld = parent;
+        // bot interface
 
-            curPlace = emptyCell;
-            state = 0;
-            age = 0;
-            botHealth = DEFAULT_BOT_HEALTH;
-            botGenom = oldGenom;
-            isAlive = true;
-        }
-
-        // copy
         public void CopyBot(Bot botToCopy)
         {
             parentWorld = botToCopy.parentWorld;
 
             curPlace = botToCopy.curPlace;
             state = botToCopy.state;
+            orientation = botToCopy.orientation;
             age = botToCopy.age;
             botHealth = botToCopy.botHealth;
             botGenom = botToCopy.botGenom;
             isAlive = botToCopy.isAlive;
         }
 
-        // reset Bot
-        public void ResetBot()
+        // do one step
+        public void DoNextStep()
         {
-            curPlace = new Coord(0,0);
-            state = 0;
-            age = 0;
-            botHealth = DEFAULT_BOT_HEALTH;
-            // new genom will be inserted
-            isAlive = true;
-        }
+            int counter = MAX_BOT_ACTIONS;
+            for (int i = 0; i < counter; ++i)
+            {
+                if (engine(state) == true || !isAlive)
+                {
+                    finalize();
+                    return;
+                }
+            }
 
-        public Genom GetGenom()
-        {
-            return botGenom;
+            finalize();
+            return;
         }
 
         public int GetAge()
@@ -89,9 +83,31 @@ namespace kursach
             return curPlace;
         }
 
+        public Genom GetGenom()
+        {
+            return botGenom;
+        }
+
         public int GetHealth()
         {
             return botHealth;
+        }
+
+        public void PrepareBotForNextGeneration(Coord emptyPlace)
+        {
+            curPlace = emptyPlace;
+            parentWorld.PutBot(curPlace, botHealth);
+        }
+
+        public void ResetBot()
+        {
+            curPlace = new Coord(0,0);
+            state = 0;
+            orientation = 0;
+            age = 0;
+            botHealth = DEFAULT_BOT_HEALTH;
+            // new genom will be inserted
+            isAlive = true;
         }
 
         public void SetGenom(Genom genomToInsert)
@@ -99,10 +115,118 @@ namespace kursach
             botGenom = genomToInsert;
         }
 
-        public void PrepareBotForNextGeneration(Coord emptyPlace)
+        // private //////////////////////////////////////////////////////////////////////////////////////////
+
+        private bool engine(int oldState)
         {
-            curPlace = emptyPlace;
-            parentWorld.PutBot(curPlace, botHealth);
+            int command = botGenom.getCommand(oldState);
+            if (command > 15)
+            {
+                int maxActionCommand = ENABLE_TWISTS ? 31 : 23; 
+                // branch on condition
+                if (command > maxActionCommand)
+                {
+                    state = (state + command) % consts.GENOM_LENGTH;
+                }
+                // twist
+                else if (command > 23 && ENABLE_TWISTS)
+                {
+                    orientation = (orientation + command) % 8;
+                    state = (state + 1) % consts.GENOM_LENGTH;
+                }
+                // watch
+                else
+                {
+                    int direction = handleDirectByOrientation(command % 8);
+                    Coord temp = new Coord(curPlace.x + DIRECT[direction, 0], curPlace.y + DIRECT[direction, 1]);
+                    CellType nextCell = parentWorld.GetCellType(temp);
+                    shiftState(nextCell);
+                }
+                return false;
+            }
+            else
+            {
+                // hit some cell
+                if (command > 7)
+                {
+                    hit(command % 8);
+                }
+                // move to some cell
+                else
+                {
+                    move(command % 8);
+                }
+                return true;
+            }
+        }
+
+        // end of step
+        private void finalize()
+        {
+            botHealth -= 1;
+            if (botHealth > 0)
+            {
+                parentWorld.PutBot(curPlace, botHealth);
+            }
+            if (botHealth <= 0)
+            {
+                kill();
+                parentWorld.KillBot(curPlace);
+            }
+            age++;
+        }
+
+        private int handleDirectByOrientation(int direct)
+        {
+            return (orientation + direct) % 8;
+        }
+
+        // move action
+        private void move(int moveDirect)
+        {
+            moveDirect = handleDirectByOrientation(moveDirect);
+
+            Coord dest = new Coord(curPlace.x + DIRECT[moveDirect, 0], curPlace.y + DIRECT[moveDirect, 1]);
+            CellType nextCell = parentWorld.GetCellType(dest);
+            switch (nextCell)
+            {
+                case CellType.EmptyCell:
+                    {
+                        // remove bot from current cell
+                        parentWorld.RemoveBot(curPlace);
+                        // we drow him at the end
+                        curPlace = dest;
+                        break;
+                    }
+                case CellType.PoisonCell:
+                    {
+                        //kill bot
+                        botHealth = 0;
+                        kill();
+                        break;
+                    }
+                case CellType.FoodCell:
+                    {
+                        // increase health
+                        increaseHealth(FOOD_VOLUME);
+                        parentWorld.RemoveFood(dest);
+                        // and move to it
+                        parentWorld.RemoveBot(curPlace);
+                        curPlace = dest;
+                        break;
+                    }
+                case CellType.WallCell:
+                    {
+                        //doNothing;
+                        break;
+                    }
+                case CellType.BotCell:
+                    {
+                        //doNothing;
+                        break;
+                    }
+            }
+            shiftState(nextCell);
         }
 
         // shift state by condition
@@ -139,121 +263,12 @@ namespace kursach
             state %= GENOM_LENGTH;
         }
 
-        private bool Engine(int oldState)
+        private void hit(int hitDirect)
         {
-            int command = botGenom.getCommand(oldState);
-            if (command > 15)
-            {
-                // branch on condition
-                if (command > 23)
-                {
-                    state = (state + command) % consts.GENOM_LENGTH;
-                }
-                // watch
-                else
-                {
-                    int direction = command % 8;
-                    Coord temp = new Coord(curPlace.x + direct[direction, 0], curPlace.y + direct[direction, 1]);
-                    CellType nextCell = parentWorld.GetCellType(temp);
-                    shiftState(nextCell);
-                }
-                return false;
-            }
-            else
-            {
-                // hit some cell
-                if (command > 7)
-                {
-                    Hit(command % 8);
-                }
-                // move to some cell
-                else
-                {
-                    Move(command % 8);
-                }
-                return true;
-            }
-        }
+            hitDirect = handleDirectByOrientation(hitDirect);
 
-        // do one step
-        public void DoNextStep()
-        {
-            int counter = MAX_BOT_ACTIONS;
-            for (int i = 0; i < counter; ++i)
-            {
-                if (Engine(state) == true || !isAlive)
-                {
-                    finalize();
-                    return;
-                }
-            }
-            
-            finalize();
-            return;
-        }
-
-        // end of step
-        private void finalize()
-        {
-            botHealth -= 1;
-            if (botHealth > 0)
-            {
-                parentWorld.PutBot(curPlace, botHealth);
-            }
-            if (botHealth <= 0)
-            {
-                Kill();
-                parentWorld.KillBot(curPlace);
-            }
-            age++;
-        }
-
-        // move action
-        private void Move(int moveDirect)
-        {
-            Coord dest = new Coord(curPlace.x + direct[moveDirect, 0], curPlace.y + direct[moveDirect, 1]);
-            CellType nextCell = parentWorld.GetCellType(dest);
-            switch (nextCell)
-            {
-                case CellType.EmptyCell:
-                    {
-                        // remove bot from current cell
-                        parentWorld.RemoveBot(curPlace);
-                        // we drow him at the end
-                        curPlace = dest;
-                        break;
-                    }
-                case CellType.PoisonCell:
-                    {
-                        //kill bot
-                        botHealth = 0;
-                        Kill();
-                        break;
-                    }
-                case CellType.FoodCell:
-                    {
-                        // can't move to it
-                        // doNothing;
-                        break;
-                    }
-                case CellType.WallCell:
-                    {
-                        //doNothing;
-                        break;
-                    }
-                case CellType.BotCell:
-                    {
-                        //doNothing;
-                        break;
-                    }
-            }
-            shiftState(nextCell);
-        }
-
-        private void Hit(int hitDirect)
-        {
             // destination point
-            Coord dest = new Coord(curPlace.x + direct[hitDirect, 0], curPlace.y + direct[hitDirect, 1]);
+            Coord dest = new Coord(curPlace.x + DIRECT[hitDirect, 0], curPlace.y + DIRECT[hitDirect, 1]);
             CellType nextCell = parentWorld.GetCellType(dest);
             switch (nextCell)
             {
@@ -271,7 +286,7 @@ namespace kursach
                 case CellType.FoodCell:
                     {
                         // feed our bot
-                        IncreaseHealth(FOOD_VOLUME);
+                        increaseHealth(FOOD_VOLUME);
                         parentWorld.RemoveFood(dest);
                         break;
                     }
@@ -289,18 +304,18 @@ namespace kursach
             shiftState(nextCell);
         }
 
-        public void IncreaseHealth(int volume)
+        public void increaseHealth(int volume)
         {
             botHealth += volume;
             botHealth = (botHealth > DEFAULT_BOT_HEALTH) ? DEFAULT_BOT_HEALTH : botHealth;
         }
 
-        public void DecreaseHealth(int volume)
+        public void decreaseHealth(int volume)
         {
             botHealth -= volume;
         }
 
-        private void Kill()
+        private void kill()
         {
             isAlive = false;
         }

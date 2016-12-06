@@ -34,9 +34,10 @@
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(87, 115);
+            this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.startBtn.Location = new System.Drawing.Point(66, 56);
             this.startBtn.Name = "startBtn";
-            this.startBtn.Size = new System.Drawing.Size(194, 76);
+            this.startBtn.Size = new System.Drawing.Size(200, 80);
             this.startBtn.TabIndex = 0;
             this.startBtn.Text = "Start";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -44,9 +45,10 @@
             // 
             // moreOptionsBtn
             // 
-            this.moreOptionsBtn.Location = new System.Drawing.Point(87, 220);
+            this.moreOptionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.moreOptionsBtn.Location = new System.Drawing.Point(66, 180);
             this.moreOptionsBtn.Name = "moreOptionsBtn";
-            this.moreOptionsBtn.Size = new System.Drawing.Size(194, 61);
+            this.moreOptionsBtn.Size = new System.Drawing.Size(200, 80);
             this.moreOptionsBtn.TabIndex = 1;
             this.moreOptionsBtn.Text = "More options";
             this.moreOptionsBtn.UseVisualStyleBackColor = true;
@@ -55,11 +57,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 412);
+            this.ClientSize = new System.Drawing.Size(338, 298);
             this.Controls.Add(this.moreOptionsBtn);
             this.Controls.Add(this.startBtn);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Evolution";
             this.ResumeLayout(false);
 
         }

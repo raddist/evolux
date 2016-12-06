@@ -38,6 +38,7 @@ namespace kursach
 
         private void continueBtn_Click(object sender, EventArgs e)
         {
+            continueBtn.Text = "Continue";
             evoWorld.StartEvolution();
         }
 

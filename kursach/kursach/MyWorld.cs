@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using static kursach.consts;
+using System.IO;
 
 namespace kursach
 {
@@ -29,6 +30,14 @@ namespace kursach
             this.genLbl = genlbl;
             this.num1 = num1lbl;
             showGeneration();
+            TheRnd = new Random();
+
+            swMax = new StreamWriter(WRITEPATH_MAXAGES, true, System.Text.Encoding.Default);
+            swMax.WriteLine("");
+            swMax.Close();
+            swAvg = new StreamWriter(WRITEPATH_AVGAGES, true, System.Text.Encoding.Default);
+            swAvg.WriteLine("");
+            swAvg.Close();
 
             mythread = new Thread(evolution);
             mythread.Start();
@@ -92,7 +101,9 @@ namespace kursach
 
         private void evolution()
         {
-            // try to gi in permanently
+            swMax = new StreamWriter(WRITEPATH_MAXAGES, false, System.Text.Encoding.Default);
+            swAvg = new StreamWriter(WRITEPATH_AVGAGES, false, System.Text.Encoding.Default);
+            // try to go in permanently
             while (true)
             {
                 // if we pressed Continue or See Next Generation
@@ -104,26 +115,30 @@ namespace kursach
             }
         }
 
+        private int findAvgAge(Bot[] arr)
+        {
+            int summ = 0;
+            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            {
+                summ += arr[i].GetAge();
+            }
+            return Convert.ToInt32(summ / arr.Length);
+        }
+
         private void processOneGeneration()
         {
-            int stepsWithoutFood = 0;
+            int steps = 0;
+
             evoField.PrepareFieldForGeneration();
             for (int i = 0; i < NUM_OF_BOTS; ++i)
             {
                 Coord emptyPlace = evoField.GetFreeCell();
                 evoBots[i].PrepareBotForNextGeneration(emptyPlace);
             }
-
             while (true)
             {                
                 int howMuchAlive = NextStep();
-                stepsWithoutFood++;
-                // add some food
-                if (stepsWithoutFood > MAX_STEPS_WITHOUT_FOOD)
-                {
-                    evoField.PutRandFood(EXTRA_FOOD_VOLUME);
-                    stepsWithoutFood = 0;
-                }
+                steps++;
 
                 if (howMuchAlive == 0)
                 {
@@ -131,8 +146,15 @@ namespace kursach
                     prepareNextGeneration();
                     generation++;
                     showGeneration();
+
+                    if (steps > 800000)
+                    {
+                        doProcess = false;
+                    }
+                    //Thread.Sleep(TIME_TO_SLEEP_BETWEEN_GEN_MS);
                     return;
                 }
+
                 // if we see only one generation
                 if (doOneGeneration)
                 {
@@ -150,15 +172,17 @@ namespace kursach
                 evoBots[i].ResetBot();
             }
 
-            Random rnd = new Random();
             for (int i = 0; i < ALIVE_LIMIT; ++i)
             {
                 Genom genomToCopy = evoBots[i].GetGenom();
                 //int second_mutation = (generation % 1000 == 0) ? HARD_MUTATION : NORM_MUTATION;
 
                 evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy);
-                evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, rnd));
-                evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, rnd));
+                evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, TheRnd));
+                evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, TheRnd));
+                //evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, rnd));
+                //evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, rnd));
+                //evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(HARD_MUTATION, rnd));
             }
         }
 
@@ -177,7 +201,23 @@ namespace kursach
                     }
                 }
             }
+            int avgAge = findAvgAge(evoBots);
+            // show on the screen
             num1.Text = evoBots[0].GetAge().ToString();
+            // write max age to file
+            writeMaxAge(evoBots[0].GetAge().ToString());
+
+            writeAvgAge(avgAge.ToString());
+        }
+
+        private void writeMaxAge(string maxAge)
+        {
+            swMax.Write(maxAge+" ");
+        }
+
+        private void writeAvgAge(string maxAge)
+        {
+            swAvg.Write(maxAge + " ");
         }
 
 
@@ -244,7 +284,10 @@ namespace kursach
         Label num1;
         Label genLbl;
         int generation;
+        Random TheRnd;
 
         Thread mythread;
+        StreamWriter swMax;
+        StreamWriter swAvg;
     }
 }

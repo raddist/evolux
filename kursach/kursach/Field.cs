@@ -52,8 +52,12 @@ namespace kursach
         // shared func ////////////////////////////////////////////////////////////////////////////////////
         public void PrepareFieldForGeneration()
         {
+            if (ENABLE_WALLS)
+            {
+                PutRandWall(WALL_ON_FIELD, LEN_OF_WALL);
+            }
             PutRandFood(FOOD_ON_FIELD);
-            PutRandPois();
+            PutRandPois(POIS_ON_FIELD);
         }
 
         public CellType GetCellType(Coord dest)
@@ -72,14 +76,43 @@ namespace kursach
             }
         }
 
-        public void PutRandPois()
+        public void PutRandPois(int volume)
         {
-            for (int i = 0; i < POIS_ON_FIELD; ++i)
+            for (int i = 0; i < volume; ++i)
             {
                 Coord temp = GetFreeCell();
                 cells[temp.x, temp.y] = CellType.PoisonCell;
                 // draw on the grid
                 drawPoisonCell(temp);
+            }
+        }
+
+        public void PutRandWall(int volume, int len)
+        {
+            for (int i = 0; i < volume; ++i)
+            {
+                Coord curWallCell = GetFreeCell();
+                drawWallCell(curWallCell);
+                cells[curWallCell.x, curWallCell.y] = CellType.WallCell;
+
+                for (int j = 1; j < len; j++)
+                {
+                    int startd = TheRnd.Next() % 8;
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        int d = (startd + k) % 8;
+                        curWallCell = new Coord(curWallCell.x + DIRECT[d, 0], curWallCell.y + DIRECT[d, 1]);
+                        if (isValid(curWallCell.x, curWallCell.y))
+                        {
+                            if (cells[curWallCell.x, curWallCell.y] == CellType.EmptyCell)
+                            {
+                                cells[curWallCell.x, curWallCell.y] = CellType.WallCell;
+                                drawWallCell(curWallCell);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -115,13 +148,12 @@ namespace kursach
 
         public Coord GetFreeCell()
         {
-            Random rnd = new Random();
             bool isComplete = false;
 
             while (!isComplete)
             {
-                int newX = rnd.Next(FIELD_WIDTH);
-                int newY = rnd.Next(FIELD_HEIGHT);
+                int newX = TheRnd.Next(FIELD_WIDTH);
+                int newY = TheRnd.Next(FIELD_HEIGHT);
                 if (cells[newX,newY] == CellType.EmptyCell)
                 {
                     return new Coord(newX, newY);
@@ -156,6 +188,22 @@ namespace kursach
             cells[dest.x, dest.y] = CellType.EmptyCell;
             // draw
             clearCell(dest);
+
+            // create new food or poison cell
+            Coord randCell = GetFreeCell();
+            int x = randCell.x;
+            int y = randCell.y;
+
+            if (TheRnd.Next() % 2 == 0)
+            {
+                cells[x, y] = CellType.FoodCell;
+                drawFoodCell(randCell);
+            }
+            else
+            {
+                cells[x, y] = CellType.PoisonCell;
+                drawPoisonCell(randCell);
+            }
         }
 
         // end shared func /////////////////////////////////////////////////////////////////////////////////////
@@ -190,6 +238,14 @@ namespace kursach
             {
                 fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = POIS_COLOR;
                 fieldDataGridView.Rows[dest.y].Cells[dest.x].Value = "";
+            }
+        }
+
+        private void drawWallCell(Coord dest)
+        {
+            if (drawChanges)
+            {
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = WALL_COLOR;
             }
         }
 
@@ -255,5 +311,6 @@ namespace kursach
         DataGridView fieldDataGridView;
 
         bool drawChanges;
+        Random TheRnd = new Random();
     }
 }
