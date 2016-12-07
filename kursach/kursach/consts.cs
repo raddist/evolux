@@ -20,7 +20,7 @@ namespace kursach
         }
 
         // genom preferences
-        public static int MAX_COMMAND_NUMBER = 64 + 32; //genomLen + move + hit + watch
+        public static int MAX_COMMAND_NUMBER = 32 + 32; //genomLen + move + hit + watch
         public const int GENOM_LENGTH = 64;
 
         /* public const int FIELD_WIDTH = 40;//50
@@ -62,8 +62,8 @@ namespace kursach
 
         public const int NUM_OF_BOTS = 64;//25
         public static int FOOD_VOLUME = 10;
-        public static int FOOD_ON_FIELD = 100;//50
-        public static int POIS_ON_FIELD = 100;//50
+        public static int FOOD_ON_FIELD = 120;//50
+        public static int POIS_ON_FIELD = 120;//50
         public static int WALL_ON_FIELD = 7;//50
 
         public static int LEN_OF_WALL = 4;

@@ -182,7 +182,7 @@
             this.Controls.Add(this.gridPanel);
             this.Controls.Add(this.panel1);
             this.Name = "mainForm";
-            this.Text = "mainForm";
+            this.Text = "World";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainForm_FormClosed);
             this.Resize += new System.EventHandler(this.mainForm_Resize);
             this.panel1.ResumeLayout(false);

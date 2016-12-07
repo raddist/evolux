@@ -32,13 +32,6 @@ namespace kursach
             showGeneration();
             TheRnd = new Random();
 
-            swMax = new StreamWriter(WRITEPATH_MAXAGES, true, System.Text.Encoding.Default);
-            swMax.WriteLine("");
-            swMax.Close();
-            swAvg = new StreamWriter(WRITEPATH_AVGAGES, true, System.Text.Encoding.Default);
-            swAvg.WriteLine("");
-            swAvg.Close();
-
             mythread = new Thread(evolution);
             mythread.Start();
         }
@@ -49,6 +42,12 @@ namespace kursach
         public void Reset()
         {
 
+        }
+
+        public void CloseFiles()
+        {
+            swMax.Close();
+            swAvg.Close();
         }
 
         public void CloseThread()
@@ -118,11 +117,11 @@ namespace kursach
         private int findAvgAge(Bot[] arr)
         {
             int summ = 0;
-            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            for (int i = 0; i < NUM_OF_BOTS/2; ++i)
             {
                 summ += arr[i].GetAge();
             }
-            return Convert.ToInt32(summ / arr.Length);
+            return Convert.ToInt32(summ / arr.Length * 2);
         }
 
         private void processOneGeneration()
@@ -205,19 +204,21 @@ namespace kursach
             // show on the screen
             num1.Text = evoBots[0].GetAge().ToString();
             // write max age to file
-            writeMaxAge(evoBots[0].GetAge().ToString());
+            writeMaxAge(evoBots[0].GetAge());
 
-            writeAvgAge(avgAge.ToString());
+            writeAvgAge(avgAge);
         }
 
-        private void writeMaxAge(string maxAge)
+        private void writeMaxAge(int maxAge)
         {
-            swMax.Write(maxAge+" ");
+            swMax.Write(maxAge);
+            swMax.Write(" ");
         }
 
-        private void writeAvgAge(string maxAge)
+        private void writeAvgAge(int maxAge)
         {
-            swAvg.Write(maxAge + " ");
+            swAvg.Write(maxAge);
+            swAvg.Write(" ");
         }
 
 

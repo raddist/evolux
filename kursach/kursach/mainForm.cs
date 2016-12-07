@@ -28,6 +28,7 @@ namespace kursach
         private void mainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             evoWorld.CloseThread();
+            evoWorld.CloseFiles();
             parent.Show();
         }
 
