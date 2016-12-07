@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 using System.Threading;
-using static kursach.consts;
 using System.IO;
+//using static kursach.consts;
+
 
 namespace kursach
 {
@@ -17,10 +18,10 @@ namespace kursach
         public MyWorld(DataGridView parentGrid, Label genlbl, Label num1lbl)
         {
             evoField = new Field(parentGrid);
-            evoBots = new Bot[NUM_OF_BOTS];
+            evoBots = new Bot[Preferences.NUM_OF_BOTS_prop];
 
             Random rnd = new Random();
-            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop; ++i)
             {
                 evoBots[i] = new Bot(this, rnd);
             }
@@ -32,10 +33,10 @@ namespace kursach
             showGeneration();
             TheRnd = new Random();
 
-            swMax = new StreamWriter(WRITEPATH_MAXAGES, true, System.Text.Encoding.Default);
+            swMax = new StreamWriter(Preferences.WRITEPATH_MAXAGES_prop, true, System.Text.Encoding.Default);
             swMax.WriteLine("");
             swMax.Close();
-            swAvg = new StreamWriter(WRITEPATH_AVGAGES, true, System.Text.Encoding.Default);
+            swAvg = new StreamWriter(Preferences.WRITEPATH_AVGAGES_prop, true, System.Text.Encoding.Default);
             swAvg.WriteLine("");
             swAvg.Close();
 
@@ -88,7 +89,7 @@ namespace kursach
         public int NextStep()
         {
             int aliveCounter = 0;
-            for (int i = 0; i < consts.NUM_OF_BOTS; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop; ++i)
             {
                 if (evoBots[i].isSteelAlive())
                 {
@@ -101,8 +102,8 @@ namespace kursach
 
         private void evolution()
         {
-            swMax = new StreamWriter(WRITEPATH_MAXAGES, false, System.Text.Encoding.Default);
-            swAvg = new StreamWriter(WRITEPATH_AVGAGES, false, System.Text.Encoding.Default);
+            swMax = new StreamWriter(Preferences.WRITEPATH_MAXAGES_prop, false, System.Text.Encoding.Default);
+            swAvg = new StreamWriter(Preferences.WRITEPATH_AVGAGES_prop, false, System.Text.Encoding.Default);
             // try to go in permanently
             while (true)
             {
@@ -118,7 +119,7 @@ namespace kursach
         private int findAvgAge(Bot[] arr)
         {
             int summ = 0;
-            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop; ++i)
             {
                 summ += arr[i].GetAge();
             }
@@ -130,7 +131,7 @@ namespace kursach
             int steps = 0;
 
             evoField.PrepareFieldForGeneration();
-            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop; ++i)
             {
                 Coord emptyPlace = evoField.GetFreeCell();
                 evoBots[i].PrepareBotForNextGeneration(emptyPlace);
@@ -158,7 +159,7 @@ namespace kursach
                 // if we see only one generation
                 if (doOneGeneration)
                 {
-                    Thread.Sleep(TIME_TO_SLEEP_MS);
+                    Thread.Sleep(Preferences.TIME_TO_SLEEP_MS_prop);
                 }
             }
         }
@@ -167,19 +168,19 @@ namespace kursach
         {
             evoField.ResetField();
             sortBots();
-            for (int i = 0; i < NUM_OF_BOTS; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop; ++i)
             {
                 evoBots[i].ResetBot();
             }
 
-            for (int i = 0; i < ALIVE_LIMIT; ++i)
+            for (int i = 0; i < Preferences.ALIVE_LIMIT_prop; ++i)
             {
                 Genom genomToCopy = evoBots[i].GetGenom();
                 //int second_mutation = (generation % 1000 == 0) ? HARD_MUTATION : NORM_MUTATION;
 
-                evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy);
-                evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, TheRnd));
-                evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, TheRnd));
+                evoBots[Preferences.ALIVE_LIMIT_prop + i].SetGenom(genomToCopy);
+                evoBots[2 * Preferences.ALIVE_LIMIT_prop + i].SetGenom(genomToCopy.Mutate(Preferences.SOFT_MUTATION_prop, TheRnd));
+                evoBots[3 * Preferences.ALIVE_LIMIT_prop + i].SetGenom(genomToCopy.Mutate(Preferences.NORM_MUTATION_prop, TheRnd));
                 //evoBots[ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(SOFT_MUTATION, rnd));
                 //evoBots[2*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(NORM_MUTATION, rnd));
                 //evoBots[3*ALIVE_LIMIT + i].SetGenom(genomToCopy.Mutate(HARD_MUTATION, rnd));
@@ -189,9 +190,9 @@ namespace kursach
         private void sortBots()
         {
             // bubble sort
-            for (int i = 0; i < NUM_OF_BOTS-1; ++i)
+            for (int i = 0; i < Preferences.NUM_OF_BOTS_prop - 1; ++i)
             {
-                for (int j = 0; j < NUM_OF_BOTS - 1-i; ++j)
+                for (int j = 0; j < Preferences.NUM_OF_BOTS_prop - 1 - i; ++j)
                 {
                     if (evoBots[j].GetAge() < evoBots[j + 1].GetAge())
                     {
@@ -228,7 +229,7 @@ namespace kursach
 
         // shared with Field ///////////////////////////////////////////////////////////////////////////////
 
-        public CellType GetCellType(Coord dest)
+        public Preferences.CellType GetCellType(Coord dest)
         {
             return evoField.GetCellType(dest);
         }

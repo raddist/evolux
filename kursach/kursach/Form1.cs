@@ -14,7 +14,14 @@ namespace kursach
     {
         public Form1()
         {
+            
             InitializeComponent();
+            /************************/
+            Preferences.Set_Default_Options(); //!!добавлен метод инициализирующий переменные значениями по умолчанию
+            this.CenterToScreen(); //выравнивание по центру экрана
+            /************************/
+
+          
         }
 
         private void startBtn_Click(object sender, EventArgs e)
@@ -22,6 +29,12 @@ namespace kursach
             mainForm newForm = new mainForm(this);
             this.Hide();
             newForm.Show();
+        }
+
+        private void moreOptionsBtn_Click(object sender, EventArgs e)
+        {
+            Change_preferences preferences = new Change_preferences();
+            preferences.ShowDialog();
         }
     }
 }

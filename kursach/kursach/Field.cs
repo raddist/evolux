@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using static kursach.consts;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
+//using static kursach.Preferences;
+
+
 
 namespace kursach
 {
@@ -17,14 +18,14 @@ namespace kursach
         //ctor
         public Field(DataGridView parentGrid)
         {
-            cells = new CellType[FIELD_WIDTH, FIELD_HEIGHT];
-            cellsValue = new int[FIELD_WIDTH, FIELD_HEIGHT];
+            cells = new Preferences.CellType[Preferences.FIELD_WIDTH_prop, Preferences.FIELD_HEIGHT_prop];
+            cellsValue = new int[Preferences.FIELD_WIDTH_prop, Preferences.FIELD_HEIGHT_prop];
 
-            for (int i = 0; i < FIELD_HEIGHT; ++i)
+            for (int i = 0; i < Preferences.FIELD_HEIGHT_prop; ++i)
             {
-                for (int j = 0; j < FIELD_WIDTH; ++j)
+                for (int j = 0; j < Preferences.FIELD_WIDTH_prop; ++j)
                 {
-                    cells[j, i] = CellType.EmptyCell;
+                    cells[j, i] = Preferences.CellType.EmptyCell;
                     cellsValue[j, i] = 0;
                 }
             }
@@ -52,17 +53,17 @@ namespace kursach
         // shared func ////////////////////////////////////////////////////////////////////////////////////
         public void PrepareFieldForGeneration()
         {
-            if (ENABLE_WALLS)
+            if (Preferences.ENABLE_WALLS_prop)
             {
-                PutRandWall(WALL_ON_FIELD, LEN_OF_WALL);
+                PutRandWall(Preferences.WALL_ON_FIELD_prop, Preferences.LEN_OF_WALL_prop);
             }
-            PutRandFood(FOOD_ON_FIELD);
-            PutRandPois(POIS_ON_FIELD);
+            PutRandFood(Preferences.FOOD_ON_FIELD_prop);
+            PutRandPois(Preferences.POIS_ON_FIELD_prop);
         }
 
-        public CellType GetCellType(Coord dest)
+        public Preferences.CellType GetCellType(Coord dest)
         {
-            return (isValid(dest.x, dest.y)) ? cells[dest.x, dest.y] : CellType.WallCell;
+            return (isValid(dest.x, dest.y)) ? cells[dest.x, dest.y] : Preferences.CellType.WallCell;
         }
 
         public void PutRandFood(int volume)
@@ -70,7 +71,7 @@ namespace kursach
             for (int i = 0; i < volume; ++i)
             {
                 Coord temp = GetFreeCell();
-                cells[temp.x, temp.y] = CellType.FoodCell;
+                cells[temp.x, temp.y] = Preferences.CellType.FoodCell;
                 // drow on the grid
                 drawFoodCell(temp);
             }
@@ -81,7 +82,7 @@ namespace kursach
             for (int i = 0; i < volume; ++i)
             {
                 Coord temp = GetFreeCell();
-                cells[temp.x, temp.y] = CellType.PoisonCell;
+                cells[temp.x, temp.y] = Preferences.CellType.PoisonCell;
                 // draw on the grid
                 drawPoisonCell(temp);
             }
@@ -93,7 +94,7 @@ namespace kursach
             {
                 Coord curWallCell = GetFreeCell();
                 drawWallCell(curWallCell);
-                cells[curWallCell.x, curWallCell.y] = CellType.WallCell;
+                cells[curWallCell.x, curWallCell.y] = Preferences.CellType.WallCell;
 
                 for (int j = 1; j < len; j++)
                 {
@@ -101,12 +102,12 @@ namespace kursach
                     for (int k = 0; k < 8; ++k)
                     {
                         int d = (startd + k) % 8;
-                        curWallCell = new Coord(curWallCell.x + DIRECT[d, 0], curWallCell.y + DIRECT[d, 1]);
+                        curWallCell = new Coord(curWallCell.x + Preferences.DIRECT[d, 0], curWallCell.y + Preferences.DIRECT[d, 1]);
                         if (isValid(curWallCell.x, curWallCell.y))
                         {
-                            if (cells[curWallCell.x, curWallCell.y] == CellType.EmptyCell)
+                            if (cells[curWallCell.x, curWallCell.y] == Preferences.CellType.EmptyCell)
                             {
-                                cells[curWallCell.x, curWallCell.y] = CellType.WallCell;
+                                cells[curWallCell.x, curWallCell.y] = Preferences.CellType.WallCell;
                                 drawWallCell(curWallCell);
                                 break;
                             }
@@ -118,7 +119,7 @@ namespace kursach
 
         public void PutBot(Coord dest, int health)
         {
-            cells[dest.x, dest.y] = CellType.BotCell;
+            cells[dest.x, dest.y] = Preferences.CellType.BotCell;
             cellsValue[dest.x, dest.y] = health;
             // draw on the grid
             drawBotCell(dest, health);
@@ -126,18 +127,18 @@ namespace kursach
 
         public void RemoveBot(Coord dest)
         {
-            cells[dest.x, dest.y] = CellType.EmptyCell;
+            cells[dest.x, dest.y] = Preferences.CellType.EmptyCell;
             // draw
             clearCell(dest);
         }
 
         public void ResetField()
         {
-            for (int i = 0; i < FIELD_HEIGHT; ++i)
+            for (int i = 0; i < Preferences.FIELD_HEIGHT_prop; ++i)
             {
-                for (int j = 0; j < FIELD_WIDTH; ++j)
+                for (int j = 0; j < Preferences.FIELD_WIDTH_prop; ++j)
                 {
-                    cells[j, i] = CellType.EmptyCell;
+                    cells[j, i] = Preferences.CellType.EmptyCell;
                     cellsValue[j, i] = 0;
                     // draw
                     clearCell(new Coord(j,i));
@@ -152,9 +153,9 @@ namespace kursach
 
             while (!isComplete)
             {
-                int newX = TheRnd.Next(FIELD_WIDTH);
-                int newY = TheRnd.Next(FIELD_HEIGHT);
-                if (cells[newX,newY] == CellType.EmptyCell)
+                int newX = TheRnd.Next(Preferences.FIELD_WIDTH_prop);
+                int newY = TheRnd.Next(Preferences.FIELD_HEIGHT_prop);
+                if (cells[newX,newY] == Preferences.CellType.EmptyCell)
                 {
                     return new Coord(newX, newY);
                 }
@@ -171,21 +172,21 @@ namespace kursach
 
         public void PoisonToFood(Coord dest)
         {
-            cells[dest.x, dest.y] = CellType.FoodCell;
+            cells[dest.x, dest.y] = Preferences.CellType.FoodCell;
             // drow on the grid
             drawFoodCell(dest);
         }
 
         public void KillBot(Coord dest)
         {
-            cells[dest.x, dest.y] = CellType.PoisonCell;
+            cells[dest.x, dest.y] = Preferences.CellType.PoisonCell;
             //draw
             drawPoisonCell(dest);
         }
 
         public void RemoveFood(Coord dest)
         {
-            cells[dest.x, dest.y] = CellType.EmptyCell;
+            cells[dest.x, dest.y] = Preferences.CellType.EmptyCell;
             // draw
             clearCell(dest);
 
@@ -196,12 +197,12 @@ namespace kursach
 
             if (TheRnd.Next() % 2 == 0)
             {
-                cells[x, y] = CellType.FoodCell;
+                cells[x, y] = Preferences.CellType.FoodCell;
                 drawFoodCell(randCell);
             }
             else
             {
-                cells[x, y] = CellType.PoisonCell;
+                cells[x, y] = Preferences.CellType.PoisonCell;
                 drawPoisonCell(randCell);
             }
         }
@@ -219,7 +220,7 @@ namespace kursach
                 int x = dest.x;
                 int y = dest.y;
 
-                fieldDataGridView.Rows[y].Cells[x].Style.BackColor = BOT_COLOR;
+                fieldDataGridView.Rows[y].Cells[x].Style.BackColor = Preferences.Get_BOT_COLOR;
                 fieldDataGridView.Rows[y].Cells[x].Value = health;
             }
         }
@@ -228,7 +229,7 @@ namespace kursach
         {
             if (drawChanges)
             {
-                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = FOOD_COLOR;
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = Preferences.Get_FOOD_COLOR;
             }
         }
 
@@ -236,7 +237,7 @@ namespace kursach
         {
             if (drawChanges)
             {
-                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = POIS_COLOR;
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = Preferences.Get_POIS_COLOR;
                 fieldDataGridView.Rows[dest.y].Cells[dest.x].Value = "";
             }
         }
@@ -245,7 +246,7 @@ namespace kursach
         {
             if (drawChanges)
             {
-                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = WALL_COLOR;
+                fieldDataGridView.Rows[dest.y].Cells[dest.x].Style.BackColor = Preferences.Get_WALL_COLOR;
             }
         }
 
@@ -264,7 +265,7 @@ namespace kursach
 
         private bool isValid(int x, int y)
         {
-            if (x < 0 || x >= FIELD_WIDTH || y < 0 || y >= FIELD_HEIGHT)
+            if (x < 0 || x >= Preferences.FIELD_WIDTH_prop || y < 0 || y >= Preferences.FIELD_HEIGHT_prop)
             {
                 return false;
             }
@@ -279,33 +280,33 @@ namespace kursach
         private void setGridPrefs()
         {
             // set number of cells
-            fieldDataGridView.ColumnCount = FIELD_WIDTH;
-            fieldDataGridView.RowCount = FIELD_HEIGHT;
+            fieldDataGridView.ColumnCount = Preferences.FIELD_WIDTH_prop;
+            fieldDataGridView.RowCount = Preferences.FIELD_HEIGHT_prop;
 
             int fieldHeight = fieldDataGridView.Height;
             int fieldWidth = fieldDataGridView.Width;
-            int rowHeight = fieldHeight / FIELD_HEIGHT;
-            int colWidth = fieldWidth / FIELD_WIDTH;
+            int rowHeight = fieldHeight / Preferences.FIELD_HEIGHT_prop;
+            int colWidth = fieldWidth / Preferences.FIELD_WIDTH_prop;
 
             foreach (DataGridViewRow row in fieldDataGridView.Rows)
             {
                 row.Height = rowHeight;
                 // little correct
-                fieldDataGridView.Height = rowHeight * FIELD_HEIGHT + 3;
+                fieldDataGridView.Height = rowHeight * Preferences.FIELD_HEIGHT_prop + 3;
             }
 
             foreach (DataGridViewColumn col in fieldDataGridView.Columns)
             {
                 col.Width = colWidth;
                 // little correct
-                fieldDataGridView.Width = colWidth * FIELD_WIDTH + 3;
+                fieldDataGridView.Width = colWidth * Preferences.FIELD_WIDTH_prop + 3;
             }
             // make font
             fieldDataGridView.DefaultCellStyle.Font = new Font("Tahoma", rowHeight / 3);
         }
 
         //state
-        CellType[,] cells;
+        Preferences.CellType[,] cells;
         int[,] cellsValue;
 
         DataGridView fieldDataGridView;

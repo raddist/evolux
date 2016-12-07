@@ -50,8 +50,9 @@
             this.moreOptionsBtn.Name = "moreOptionsBtn";
             this.moreOptionsBtn.Size = new System.Drawing.Size(200, 80);
             this.moreOptionsBtn.TabIndex = 1;
-            this.moreOptionsBtn.Text = "More options";
+            this.moreOptionsBtn.Text = "More preferences";
             this.moreOptionsBtn.UseVisualStyleBackColor = true;
+            this.moreOptionsBtn.Click += new System.EventHandler(this.moreOptionsBtn_Click);
             // 
             // Form1
             // 
@@ -60,6 +61,7 @@
             this.ClientSize = new System.Drawing.Size(338, 298);
             this.Controls.Add(this.moreOptionsBtn);
             this.Controls.Add(this.startBtn);
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Evolution";
             this.ResumeLayout(false);
