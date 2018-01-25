@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="consts.cs" />
+    <Compile Include="Preferences.cs" />
     <Compile Include="Coord.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Form1.cs">
@@ -65,6 +65,12 @@
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MyWorld.cs" />
+    <Compile Include="Change_preferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Change_preferences.Designer.cs">
+      <DependentUpon>Change_preferences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -72,6 +78,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Change_preferences.resx">
+      <DependentUpon>Change_preferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

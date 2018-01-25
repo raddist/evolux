@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static kursach.consts;
+//using static kursach.Preferences;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -22,7 +22,7 @@ namespace kursach
             state = 0;
             orientation = 0;
             age = 0;
-            botHealth = DEFAULT_BOT_HEALTH;
+            botHealth = Preferences.DEFAULT_BOT_HEALTH_prop;
             botGenom = new Genom(rnd);
             isAlive = true;
         }
@@ -59,7 +59,7 @@ namespace kursach
         // do one step
         public void DoNextStep()
         {
-            int counter = MAX_BOT_ACTIONS;
+            int counter = Preferences.MAX_BOT_ACTIONS_prop;
             for (int i = 0; i < counter; ++i)
             {
                 if (engine(state) == true || !isAlive)
@@ -105,7 +105,7 @@ namespace kursach
             state = 0;
             orientation = 0;
             age = 0;
-            botHealth = DEFAULT_BOT_HEALTH;
+            botHealth = Preferences.DEFAULT_BOT_HEALTH_prop;
             // new genom will be inserted
             isAlive = true;
         }
@@ -122,24 +122,24 @@ namespace kursach
             int command = botGenom.getCommand(oldState);
             if (command > 15)
             {
-                int maxActionCommand = ENABLE_TWISTS ? 31 : 23; 
+                int maxActionCommand = Preferences.ENABLE_TWISTS_prop ? 31 : 23; 
                 // branch on condition
                 if (command > maxActionCommand)
                 {
-                    state = (state + command) % consts.GENOM_LENGTH;
+                    state = (state + command) % Preferences.GENOM_LENGTH_prop;
                 }
                 // twist
-                else if (command > 23 && ENABLE_TWISTS)
+                else if (command > 23 && Preferences.ENABLE_TWISTS_prop)
                 {
                     orientation = (orientation + command) % 8;
-                    state = (state + 1) % consts.GENOM_LENGTH;
+                    state = (state + 1) % Preferences.GENOM_LENGTH_prop;
                 }
                 // watch
                 else
                 {
                     int direction = handleDirectByOrientation(command % 8);
-                    Coord temp = new Coord(curPlace.x + DIRECT[direction, 0], curPlace.y + DIRECT[direction, 1]);
-                    CellType nextCell = parentWorld.GetCellType(temp);
+                    Coord temp = new Coord(curPlace.x + Preferences.DIRECT[direction, 0], curPlace.y + Preferences.DIRECT[direction, 1]);
+                    Preferences.CellType nextCell = (Preferences.CellType)parentWorld.GetCellType(temp);
                     shiftState(nextCell);
                 }
                 return false;
@@ -186,11 +186,11 @@ namespace kursach
         {
             moveDirect = handleDirectByOrientation(moveDirect);
 
-            Coord dest = new Coord(curPlace.x + DIRECT[moveDirect, 0], curPlace.y + DIRECT[moveDirect, 1]);
-            CellType nextCell = parentWorld.GetCellType(dest);
+            Coord dest = new Coord(curPlace.x + Preferences.DIRECT[moveDirect, 0], curPlace.y + Preferences.DIRECT[moveDirect, 1]);
+            Preferences.CellType nextCell = (Preferences.CellType)parentWorld.GetCellType(dest);
             switch (nextCell)
             {
-                case CellType.EmptyCell:
+                case Preferences.CellType.EmptyCell:
                     {
                         // remove bot from current cell
                         parentWorld.RemoveBot(curPlace);
@@ -198,29 +198,29 @@ namespace kursach
                         curPlace = dest;
                         break;
                     }
-                case CellType.PoisonCell:
+                case Preferences.CellType.PoisonCell:
                     {
                         //kill bot
                         botHealth = 0;
                         kill();
                         break;
                     }
-                case CellType.FoodCell:
+                case Preferences.CellType.FoodCell:
                     {
                         // increase health
-                        increaseHealth(FOOD_VOLUME);
+                        increaseHealth(Preferences.FOOD_VOLUME_prop);
                         parentWorld.RemoveFood(dest);
                         // and move to it
                         parentWorld.RemoveBot(curPlace);
                         curPlace = dest;
                         break;
                     }
-                case CellType.WallCell:
+                case Preferences.CellType.WallCell:
                     {
                         //doNothing;
                         break;
                     }
-                case CellType.BotCell:
+                case Preferences.CellType.BotCell:
                     {
                         //doNothing;
                         break;
@@ -230,37 +230,37 @@ namespace kursach
         }
 
         // shift state by condition
-        private void shiftState(CellType nextCell)
+        private void shiftState(Preferences.CellType nextCell)
         {
             switch (nextCell)
             {
-                case CellType.EmptyCell:
+                case Preferences.CellType.EmptyCell:
                     {
                         state += 1;
                         break;
                     }
-                case CellType.PoisonCell:
+                case Preferences.CellType.PoisonCell:
                     {
                         state += 2;
                         break;
                     }
-                case CellType.FoodCell:
+                case Preferences.CellType.FoodCell:
                     {
                         state += 3;
                         break;
                     }
-                case CellType.WallCell:
+                case Preferences.CellType.WallCell:
                     {
                         state += 4;
                         break;
                     }
-                case CellType.BotCell:
+                case Preferences.CellType.BotCell:
                     {
                         state += 5;
                         break;
                     }
             }
-            state %= GENOM_LENGTH;
+            state %= Preferences.GENOM_LENGTH_prop;
         }
 
         private void hit(int hitDirect)
@@ -268,34 +268,34 @@ namespace kursach
             hitDirect = handleDirectByOrientation(hitDirect);
 
             // destination point
-            Coord dest = new Coord(curPlace.x + DIRECT[hitDirect, 0], curPlace.y + DIRECT[hitDirect, 1]);
-            CellType nextCell = parentWorld.GetCellType(dest);
+            Coord dest = new Coord(curPlace.x + Preferences.DIRECT[hitDirect, 0], curPlace.y + Preferences.DIRECT[hitDirect, 1]);
+            Preferences.CellType nextCell = parentWorld.GetCellType(dest);
             switch (nextCell)
             {
-                case CellType.EmptyCell:
+                case Preferences.CellType.EmptyCell:
                     {
                         //doNothing;
                         break;
                     }
-                case CellType.PoisonCell:
+                case Preferences.CellType.PoisonCell:
                     {
                         // poison becomes food
                         parentWorld.PoisonToFood(dest);
                         break;
                     }
-                case CellType.FoodCell:
+                case Preferences.CellType.FoodCell:
                     {
                         // feed our bot
-                        increaseHealth(FOOD_VOLUME);
+                        increaseHealth(Preferences.FOOD_VOLUME_prop);
                         parentWorld.RemoveFood(dest);
                         break;
                     }
-                case CellType.WallCell:
+                case Preferences.CellType.WallCell:
                     {
                         //doNothing;
                         break;
                     }
-                case CellType.BotCell:
+                case Preferences.CellType.BotCell:
                     {
                         //doNothing;
                         break;
@@ -307,7 +307,7 @@ namespace kursach
         public void increaseHealth(int volume)
         {
             botHealth += volume;
-            botHealth = (botHealth > DEFAULT_BOT_HEALTH) ? DEFAULT_BOT_HEALTH : botHealth;
+            botHealth = (botHealth > Preferences.DEFAULT_BOT_HEALTH_prop) ? Preferences.DEFAULT_BOT_HEALTH_prop : botHealth;
         }
 
         public void decreaseHealth(int volume)

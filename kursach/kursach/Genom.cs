@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static kursach.consts;
+//using static kursach.Preferences;
 
 namespace kursach
 {
@@ -12,19 +12,19 @@ namespace kursach
         //behavior
         public Genom(Random rnd)
         {
-            botGenom = new int[GENOM_LENGTH];
+            botGenom = new int[Preferences.GENOM_LENGTH_prop];
 
-            for (int i = 0; i < GENOM_LENGTH; ++i)
+            for (int i = 0; i < Preferences.GENOM_LENGTH_prop; ++i)
             {
-                botGenom[i] = rnd.Next() % MAX_COMMAND_NUMBER;
+                botGenom[i] = rnd.Next() % Preferences.MAX_COMMAND_NUMBER_prop;
             }
         }
 
         // copy ctor
         public Genom(Genom genomToCopy)
         {
-            botGenom = new int[GENOM_LENGTH];
-            for (int i = 0; i < GENOM_LENGTH; ++i)
+            botGenom = new int[Preferences.GENOM_LENGTH_prop];
+            for (int i = 0; i < Preferences.GENOM_LENGTH_prop; ++i)
             {
                 botGenom[i] = genomToCopy.botGenom[i];
             }
@@ -41,10 +41,10 @@ namespace kursach
             int counter = 1;
             Genom mutateGenom = new Genom(this);
 
-            while (counter/(double)GENOM_LENGTH < (double)procents)
+            while (counter / (double)Preferences.GENOM_LENGTH_prop < (double)procents)
             {
-                int index = rnd.Next() % GENOM_LENGTH;
-                int command = rnd.Next() % MAX_COMMAND_NUMBER;
+                int index = rnd.Next() % Preferences.GENOM_LENGTH_prop;
+                int command = rnd.Next() % Preferences.MAX_COMMAND_NUMBER_prop;
                 mutateGenom.botGenom[index] = command;
                 counter++;
             }

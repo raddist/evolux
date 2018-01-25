@@ -20,6 +20,8 @@ namespace kursach
         {
             InitializeComponent();
 
+            this.CenterToParent();
+
             parent = parentForm;
 
             evoWorld = new MyWorld(fieldDataGridView, generationLbl, num1Lbl);

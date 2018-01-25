@@ -181,6 +181,7 @@
             this.Controls.Add(this.schedulePanel);
             this.Controls.Add(this.gridPanel);
             this.Controls.Add(this.panel1);
+            this.MinimizeBox = false;
             this.Name = "mainForm";
             this.Text = "World";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainForm_FormClosed);

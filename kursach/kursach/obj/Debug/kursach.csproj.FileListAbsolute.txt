@@ -21,3 +21,14 @@ C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\k
 C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\System.Net.Http.dll
 C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\System.Net.Http.xml
 C:\Users\Andrey\Documents\Univercity\Мат моделирование\kursach\kursach\kursach\bin\Debug\ru\System.Net.Http.resources.dll
+D:\kr\kursach\kursach\bin\Debug\kursach.exe.config
+D:\kr\kursach\kursach\obj\Debug\kursach.exe
+D:\kr\kursach\kursach\obj\Debug\kursach.pdb
+D:\kr\kursach\kursach\obj\Debug\kursach.csprojResolveAssemblyReference.cache
+D:\kr\kursach\kursach\obj\Debug\kursach.Form1.resources
+D:\kr\kursach\kursach\obj\Debug\kursach.mainForm.resources
+D:\kr\kursach\kursach\obj\Debug\kursach.Properties.Resources.resources
+D:\kr\kursach\kursach\obj\Debug\kursach.csproj.GenerateResource.Cache
+D:\kr\kursach\kursach\bin\Debug\kursach.exe
+D:\kr\kursach\kursach\bin\Debug\kursach.pdb
+D:\kr\kursach\kursach\obj\Debug\kursach.Change_preferences.resources
