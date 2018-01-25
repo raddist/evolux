@@ -148,8 +148,6 @@ namespace kursach
 
          private void View_Preferences()
          {
-            
-             
              cb_ENABLE_TWISTS.Checked = this.ENABLE_TWISTS;           
              cb_ENABLE_WALLS.Checked = this.ENABLE_WALLS;           
 
@@ -172,9 +170,33 @@ namespace kursach
              tb_WALL_ON_FIELD.Text = this.WALL_ON_FIELD.ToString();
              tb_WRITEPATH_AVGAGES.Text = this.WRITEPATH_AVGAGES;
              tb_WRITEPATH_MAXAGES.Text = this.WRITEPATH_MAXAGES;
-         }
+        }
 
-      
+
+        private void validateAndApplyMaxAges()
+        {
+            if (File.Exists(tb_WRITEPATH_MAXAGES.Text.Trim()))
+            {
+                this.WRITEPATH_MAXAGES = tb_WRITEPATH_MAXAGES.Text.Trim();
+            }
+            else
+            {
+                MessageBox.Show("недопустимое значение WRITEPATH_AVGAGES: такого файла не существует");
+                tb_WRITEPATH_MAXAGES.Text = this.WRITEPATH_MAXAGES;
+            }
+        }
+        private void validateAndApplyAvgAges()
+        {
+            if (File.Exists(tb_WRITEPATH_AVGAGES.Text.Trim()))
+            {
+                this.WRITEPATH_AVGAGES = tb_WRITEPATH_AVGAGES.Text.Trim();
+            }
+            else
+            {
+                MessageBox.Show("недопустимое значение WRITEPATH_AVGAGES: такого файла не существует");
+                tb_WRITEPATH_AVGAGES.Text = this.WRITEPATH_AVGAGES;
+            }
+        }
 
 
         private void ch_WRITEPATH_MAXAGES_Click(object sender, EventArgs e)
@@ -182,6 +204,8 @@ namespace kursach
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 tb_WRITEPATH_MAXAGES.Text = openFileDialog1.FileName;
+
+                validateAndApplyMaxAges();
             } 
         }
 
@@ -190,6 +214,8 @@ namespace kursach
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 tb_WRITEPATH_AVGAGES.Text = openFileDialog1.FileName;
+
+                validateAndApplyAvgAges();
             } 
         }
 
@@ -650,28 +676,12 @@ namespace kursach
 
         private void tb_WRITEPATH_MAXAGES_Validating(object sender, CancelEventArgs e)
         {
-            if (File.Exists(tb_WRITEPATH_MAXAGES.Text.Trim()))
-            {
-                this.WRITEPATH_MAXAGES = tb_WRITEPATH_MAXAGES.Text.Trim();
-            }
-            else
-            {
-                MessageBox.Show("недопустимое значение WRITEPATH_MAXAGES: такого файла не существует");
-                tb_WRITEPATH_MAXAGES.Text = this.WRITEPATH_MAXAGES;
-            }
+            validateAndApplyMaxAges();
         }
 
         private void tb_WRITEPATH_AVGAGES_Validating(object sender, CancelEventArgs e)
         {
-            if (File.Exists(tb_WRITEPATH_AVGAGES.Text.Trim()))
-            {
-                this.WRITEPATH_AVGAGES = tb_WRITEPATH_AVGAGES.Text.Trim();
-            }
-            else
-            {
-                MessageBox.Show("недопустимое значение WRITEPATH_AVGAGES: такого файла не существует");
-                tb_WRITEPATH_AVGAGES.Text = this.WRITEPATH_AVGAGES;
-            }
+            validateAndApplyAvgAges();
         }
 
         private void cb_ENABLE_WALLS_CheckedChanged(object sender, EventArgs e)

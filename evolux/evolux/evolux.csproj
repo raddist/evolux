@@ -7,8 +7,8 @@
     <ProjectGuid>{ACE5E7F2-103C-42D3-9D04-0D6E67A63F05}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>kursach</RootNamespace>
-    <AssemblyName>kursach</AssemblyName>
+    <RootNamespace>evolux</RootNamespace>
+    <AssemblyName>evolux</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
