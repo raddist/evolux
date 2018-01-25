@@ -32,3 +32,6 @@ D:\kr\kursach\kursach\obj\Debug\kursach.csproj.GenerateResource.Cache
 D:\kr\kursach\kursach\bin\Debug\kursach.exe
 D:\kr\kursach\kursach\bin\Debug\kursach.pdb
 D:\kr\kursach\kursach\obj\Debug\kursach.Change_preferences.resources
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\kursach.exe.config
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.exe
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.pdb

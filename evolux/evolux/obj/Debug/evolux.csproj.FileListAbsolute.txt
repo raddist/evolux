@@ -1,0 +1,13 @@
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\kursach.exe.config
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.exe
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.pdb
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\kursach.exe
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\kursach.pdb
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\System.Net.Http.dll
+D:\ab_projects\evolux\kursach\kursach\bin\Debug\System.Net.Http.xml
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\evolux.csprojResolveAssemblyReference.cache
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.Form1.resources
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.mainForm.resources
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.Change_preferences.resources
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\kursach.Properties.Resources.resources
+D:\ab_projects\evolux\kursach\kursach\obj\Debug\evolux.csproj.GenerateResource.Cache
